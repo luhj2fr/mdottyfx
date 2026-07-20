@@ -10,23 +10,19 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Check out your plugin code
+      - name: Check out plugin code
         uses: actions/checkout@v4
 
-      - name: Check out JUCE
-        uses: actions/checkout@v4
-        with:
-          repository: juce-framework/JUCE
-          ref: 7.0.12
-          path: JUCE
+      - name: Set up MSVC Developer Command Prompt
+        uses: ilammy/msvc-dev-cmd@v1
 
-      - name: Configure the project
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+      - name: Configure CMake
+        run: cmake -B build -G "Visual Studio 17 2022" -A x64
 
-      - name: Build the plugin
+      - name: Build Plugin (Release)
         run: cmake --build build --config Release --parallel
 
-      - name: Upload the built VST3
+      - name: Upload VST3 Artifact
         uses: actions/upload-artifact@v4
         with:
           name: mdottyfx-Windows-VST3
