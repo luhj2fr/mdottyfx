@@ -1,37 +1,33 @@
-name: Build & Release mdottyfx Setup
+name: Build Plugin
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
-  build-windows:
+  build:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Check out your plugin code
+        uses: actions/checkout@v4
 
-    - name: Setup Ninja
-      uses: llvm/actions/install-ninja@v1
+      - name: Check out JUCE
+        uses: actions/checkout@v4
+        with:
+          repository: juce-framework/JUCE
+          ref: 7.0.12
+          path: JUCE
 
-    - name: Configure CMake
-      run: cmake -B build -G "Ninja" -DCMAKE_BUILD_TYPE=Release
+      - name: Configure the project
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
 
-    - name: Build VST3
-      run: cmake --build build --config Release
+      - name: Build the plugin
+        run: cmake --build build --config Release --parallel
 
-    - name: Install Inno Setup
-      run: choco install innosetup -y
-
-    - name: Compile Windows Setup EXE
-      run: iscc installer.iss
-
-    - name: Create Release
-      uses: softprops/action-gh-release@v1
-      with:
-        files: Output/mdottyfx_Setup.exe
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload the built VST3
+        uses: actions/upload-artifact@v4
+        with:
+          name: mdottyfx-Windows-VST3
+          path: build/mdottyfx_artefacts/Release/VST3/**
