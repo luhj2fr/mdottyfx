@@ -55,6 +55,10 @@ target_include_directories(MDOTTYFX PRIVATE
     Source/Presets
 )
 
+if (MSVC)
+    target_compile_options(MDOTTYFX PRIVATE /utf-8)
+endif()
+
 target_compile_definitions(MDOTTYFX PUBLIC
     JUCE_WEB_BROWSER=0
     JUCE_USE_CURL=0
