@@ -33,8 +33,8 @@ void GrainDelay::process (juce::AudioBuffer<float>& buffer)
 
     for (int ch = 0; ch < numCh; ++ch)
     {
-        auto* coeffsHP = juce::dsp::IIR::Coefficients<float>::makeHighPass (sampleRate, juce::jlimit (20.0f, 20000.0f, params.hpHz));
-        auto* coeffsLP = juce::dsp::IIR::Coefficients<float>::makeLowPass (sampleRate, juce::jlimit (20.0f, 20000.0f, params.lpHz));
+        auto coeffsHP = juce::dsp::IIR::Coefficients<float>::makeHighPass (sampleRate, juce::jlimit (20.0f, 20000.0f, params.hpHz));
+        auto coeffsLP = juce::dsp::IIR::Coefficients<float>::makeLowPass (sampleRate, juce::jlimit (20.0f, 20000.0f, params.lpHz));
         *hpFilters[(size_t) ch].coefficients = *coeffsHP;
         *lpFilters[(size_t) ch].coefficients = *coeffsLP;
 
