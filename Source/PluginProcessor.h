@@ -1,6 +1,16 @@
 #pragma once
 #include <JuceHeader.h>
 
+struct Preset {
+    juce::String name;
+    juce::String category;
+    float macro1;   // Grain Size
+    float macro2;   // Density
+    float cutoff;   // Low Pass Filter Cutoff
+    float pitch;    // Pitch Shift
+    float mix;      // Dry/Wet Mix
+};
+
 class MdottyfxAudioProcessor : public juce::AudioProcessor {
 public:
     MdottyfxAudioProcessor();
@@ -18,20 +28,25 @@ public:
     bool producesMidi() const override { return false; }
     double getTailLengthSeconds() const override { return 0.0; }
 
-    int getNumPrograms() override { return 1; }
-    int getCurrentProgram() override { return 0; }
-    void setCurrentProgram(int) override {}
-    const juce::String getProgramName(int) override { return {}; }
+    int getNumPrograms() override { return (int)factoryPresets.size(); }
+    int getCurrentProgram() override { return currentPresetIndex; }
+    void setCurrentProgram(int index) override;
+    const juce::String getProgramName(int index) override;
     void changeProgramName(int, const juce::String&) override {}
 
     void getStateInformation(juce::MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
 
     juce::AudioProcessorValueTreeState apvts;
+    const std::vector<Preset>& getPresets() const { return factoryPresets; }
 
 private:
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
-    
+    void initPresets();
+
+    std::vector<Preset> factoryPresets;
+    int currentPresetIndex = 0;
+
     juce::AudioBuffer<float> circularBuffer;
     int writePosition = 0;
 
