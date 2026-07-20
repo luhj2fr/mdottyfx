@@ -6,6 +6,11 @@ class PortalKnobLookAndFeel : public juce::LookAndFeel_V4 {
 public:
     PortalKnobLookAndFeel() {
         setColour(juce::Slider::rotarySliderOutlineColourId, juce::Colour(0xff22222d));
+        setColour(juce::ComboBox::backgroundColourId, juce::Colour(0xff181920));
+        setColour(juce::ComboBox::outlineColourId, juce::Colour(0xff3f3f46));
+        setColour(juce::ComboBox::focusedOutlineColourId, juce::Colour(0xffa855f7));
+        setColour(juce::PopupMenu::backgroundColourId, juce::Colour(0xff12131a));
+        setColour(juce::PopupMenu::highlightedBackgroundColourId, juce::Colour(0xffa855f7));
     }
 
     void drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height,
@@ -90,6 +95,10 @@ private:
     
     PortalKnobLookAndFeel customLNF;
     GranularParticleVisualizer visualizer;
+
+    juce::ComboBox presetSelector;
+    juce::TextButton prevPresetBtn { "<" };
+    juce::TextButton nextPresetBtn { ">" };
 
     juce::Slider macro1Slider, macro2Slider, mixSlider;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> macro1Attach, macro2Attach, mixAttach;
