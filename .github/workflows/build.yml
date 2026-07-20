@@ -13,11 +13,14 @@ jobs:
       - name: Check out plugin code
         uses: actions/checkout@v4
 
-      - name: Set up MSVC Developer Command Prompt
+      - name: Set up MSVC environment
         uses: ilammy/msvc-dev-cmd@v1
 
+      - name: Setup Ninja
+        uses: llvm/actions/install-ninja@v1
+
       - name: Configure CMake
-        run: cmake -B build -G "Visual Studio 17 2022" -A x64
+        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
 
       - name: Build Plugin (Release)
         run: cmake --build build --config Release --parallel
