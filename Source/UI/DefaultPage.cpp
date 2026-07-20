@@ -1,5 +1,6 @@
 #include "DefaultPage.h"
 #include "MdottyLookAndFeel.h"
+#include "../PluginProcessor.h"
 
 DefaultPage::DefaultPage (juce::AudioProcessorValueTreeState& state)
     : xyPad (state, ParamIDs::xyX, ParamIDs::xyY)
