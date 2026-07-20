@@ -10,22 +10,23 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Check out plugin code
+      - name: Check out your plugin code
         uses: actions/checkout@v4
 
-      - name: Set up MSVC environment
-        uses: ilammy/msvc-dev-cmd@v1
+      - name: Check out JUCE
+        uses: actions/checkout@v4
+        with:
+          repository: juce-framework/JUCE
+          ref: 7.0.12
+          path: JUCE
 
-      - name: Setup Ninja
-        uses: llvm/actions/install-ninja@v1
+      - name: Configure the project
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
 
-      - name: Configure CMake
-        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
-
-      - name: Build Plugin (Release)
+      - name: Build the plugin
         run: cmake --build build --config Release --parallel
 
-      - name: Upload VST3 Artifact
+      - name: Upload the built VST3
         uses: actions/upload-artifact@v4
         with:
           name: mdottyfx-Windows-VST3
